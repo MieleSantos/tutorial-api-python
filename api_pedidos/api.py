@@ -4,7 +4,7 @@ from typing import List
 from fastapi import Depends, FastAPI, Request
 from fastapi.responses import JSONResponse
 
-from api_pedidos.esquema import HealthCheckResponse, Item
+from api_pedidos.esquema import ErrorResponse, Item
 from api_pedidos.excecao import (
     FalhaDeComunicacaoError,
     PedidoNaoEncontradoError,
@@ -45,7 +45,7 @@ def tratar_erro_falha_de_comunicacao(
     description="Checa se o servidor está online",
 )
 async def healthcheck():
-    return HealthCheckResponse(status="ok")
+    return ErrorResponse(status="ok")
 
 
 @app.get(
