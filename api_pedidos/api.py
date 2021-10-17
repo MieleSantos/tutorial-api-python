@@ -48,17 +48,22 @@ async def healthcheck():
     return ErrorResponse
 
 
-@app.get("/orders/{identificacao_do_pedido}/items", responses={
-    HTTPStatus.NOT_FOUND.value: {
-        "description": "Pedido não encontrado",
-        "model": ErrorResponse,
+@app.get(
+    "/orders/{identificacao_do_pedido}/items",
+    responses={
+        HTTPStatus.NOT_FOUND.value: {
+            "description": "Pedido não encontrado",
+            "model": ErrorResponse,
+        },
+        HTTPStatus.BAD_GATEWAY.value: {
+            "description": "Falha de comunicação com o servidor remoto",
+            "model": ErrorResponse,
+        },
     },
-    HTTPStatus.BAD_GATEWAY.value: {
-        "description": "Falha de comunicação com o servidor remoto",
-        "model": ErrorResponse,
-    }},
-    summary="Itens de um pedido", tags=["pedidos"],
+    summary="Itens de um pedido",
+    tags=["pedidos"],
     description="Retorna todos os itens de um determinado pedido",
-    response_model=List[Item])
+    response_model=List[Item],
+)
 def listar_itens(itens: List[Item] = Depends(recuperar_itens_por_pedido)):
     return itens
